@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Project Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5 display-4 fw-bold text-primary">
+        Welcome to the Project Portal
+    </h1>
+
+    <div class="row g-4 g-lg-5 justify-content-center">
+        {% for project in projects %}
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{{ url_for('project_detail', project_id=project.id) }}"
+               class="text-decoration-none d-block h-100">
+                <div class="card h-100 text-white shadow-lg rounded-5 overflow-hidden card-lift-effect
+                            {% if project.color == 'indigo' %}bg-indigo
+                            {% elif project.color == 'teal' %}bg-teal
+                            {% elif project.color == 'purple' %}bg-purple
+                            {% else %}bg-{{ project.color }}{% endif %}">
+                    <div class="card-body d-flex flex-column justify-content-center text-center py-5 px-4">
+                        <h2 class="fw-bold mb-0">{{ project.name }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card-lift-effect {
+        transition: all 0.35s ease;
+        cursor: pointer;
+        min-height: 210px;
+    }
+    .card-lift-effect:hover {
+        transform: translateY(-14px);
+        box-shadow: 0 28px 56px rgba(0,0,0,0.28) !important;
+    }
+    .bg-indigo { background: linear-gradient(135deg, #4f46e5, #7c3aed) !important; }
+    .bg-teal   { background-color: #20c997 !important; }
+    .bg-purple { background-color: #6f42c1 !important; }
+</style>
+{% endblock %}
