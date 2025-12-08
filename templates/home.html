@@ -24,8 +24,24 @@
             </a>
         </div>
         {% endfor %}
+        <!-- + button to create a new project -->
+        <div class="col-12 d-flex justify-content-end">
+            <a href="#" class="text-decoration-none">
+                <div class="card add-new-card d-flex flex-column align-items-center justify-content-center"
+                    style="width: 100px; height: 120px; border: 2px dashed #6c757d; min-height: unset; padding: 0.5rem;">
+                    <i class="bi bi-plus-lg display-5 text-secondary mb-1"></i>
+                    <h6 class="fw-normal text-secondary mb-0 text-center">Add Project</h6>
+                </div>
+            </a>
+        </div>
+
+                
     </div>
 </div>
+
+
+
+
 
 <style>
     .card-lift-effect {
@@ -37,8 +53,23 @@
         transform: translateY(-14px);
         box-shadow: 0 28px 56px rgba(0,0,0,0.28) !important;
     }
+
+    /* style for the + "New Project" card */
+.add-new-card {
+    transition: all 0.35s ease;
+    cursor: pointer;
+    min-height: 210px;
+    border-style: dashed !important;
+}
+.add-new-card:hover {
+    transform: translateY(-14px);
+    box-shadow: 0 28px 56px rgba(0,0,0,0.28) !important;
+    background-color: #f8f9fa !important;
+}
     .bg-indigo { background: linear-gradient(135deg, #4f46e5, #7c3aed) !important; }
     .bg-teal   { background-color: #20c997 !important; }
     .bg-purple { background-color: #6f42c1 !important; }
+    .bg-grey-dark   { background-color: #495057 !important; }
+    .bg-grey-medium { background-color: #6c757d !important; }
 </style>
 {% endblock %}

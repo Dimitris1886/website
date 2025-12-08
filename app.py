@@ -8,7 +8,7 @@ app.secret_key = "dev"
 @app.route("/")
 def home():
     projects = [
-        {"id": 1, "name": "Project A", "color": "primary"},
+        {"id": 1, "name": "Project A", "color": "grey-medium"},
         {"id": 2, "name": "Project B", "color": "success"},
         {"id": 3, "name": "Project C", "color": "warning"},
         {"id": 4, "name": "Project D", "color": "danger"},
@@ -25,7 +25,7 @@ def home():
 
 
 
-# ---------- PROJECT DETAIL PAGE ----------
+# ---------- PROJECT DETAIL PAGE ---------- CHANGE ALL!!!!
 @app.route("/project/<int:project_id>")
 def project_detail(project_id):
     # Fake data for now
