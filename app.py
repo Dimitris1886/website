@@ -1,42 +1,53 @@
 from flask import Flask, render_template, url_for, request, redirect
+from flask_sqlalchemy import SQLAlchemy 
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "dev"
 
-# ONE SINGLE LIST — all projects (no color anymore)
-PROJECTS = [
-    {"id": 1, "name": "Project A"},
-    {"id": 2, "name": "Project B"},
-    {"id": 3, "name": "Project C"},
-    {"id": 4, "name": "Project D"},
-    {"id": 5, "name": "Project E"},
-    {"id": 6, "name": "Project F"},
-    {"id": 7, "name": "Project G"},
-    {"id": 8, "name": "Project H"},
-]
+# data base connection
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///projects.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+# project table model
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Project {self.name}>'
+    
+# create database / creates automatically in the folder instance
+with app.app_context():
+    db.create_all()
+
+
+# routes
 @app.route("/")
 def home():
-    return render_template("home.html", projects=PROJECTS)
+    projects = Project.query.order_by(Project.id).all()
+    return render_template("home.html", projects=projects)
+
 
 @app.route("/project/<int:project_id>")
 def project_detail(project_id):
-    project = next((p for p in PROJECTS if p["id"] == project_id), None)
+    project = Project.query.get_or_404(project_id)
     if project is None:
         return "Project not found", 404
     return render_template("project_detail.html", name=project["name"])
 
-# ← FIXED: only reads "name", no "color" → no more error!
+
+# reads "name"
 @app.route("/add_project", methods=["GET", "POST"])
 def add_project():
     if request.method == "POST":
         name = request.form["name"].strip()
-        if name:  # don't allow empty names
-            new_project = {
-                "id": max(p["id"] for p in PROJECTS) + 1,
-                "name": name
-            }
-            PROJECTS.append(new_project)
+        if name:
+            new_project = Project(name=name)
+            db.session.add(new_project)
+            db.session.commit()
         return redirect(url_for("home"))
     return redirect(url_for("home"))
 
