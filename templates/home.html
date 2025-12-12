@@ -3,73 +3,99 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-5 display-4 fw-bold text-primary">
+    <h1 class="text-center mb-5 display-4 fw-bold text-secondary">
         Welcome to the Project Portal
     </h1>
 
-    <div class="row g-4 g-lg-5 justify-content-center">
+    <!-- ← PERFECT 4 PER ROW GRID with tiny gaps -->
+    <div class="row row-cols-4 g-2">
+
         {% for project in projects %}
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col">
             <a href="{{ url_for('project_detail', project_id=project.id) }}"
                class="text-decoration-none d-block h-100">
-                <div class="card h-100 text-white shadow-lg rounded-5 overflow-hidden card-lift-effect
-                            {% if project.color == 'indigo' %}bg-indigo
-                            {% elif project.color == 'teal' %}bg-teal
-                            {% elif project.color == 'purple' %}bg-purple
-                            {% else %}bg-{{ project.color }}{% endif %}">
+                <div class="card h-100 bg-primary text-white shadow-lg rounded-5 overflow-hidden card-lift-effect">
                     <div class="card-body d-flex flex-column justify-content-center text-center py-5 px-4">
+                        <i class="bi bi-building display-1 mb-3 opacity-75"></i>
                         <h2 class="fw-bold mb-0">{{ project.name }}</h2>
                     </div>
                 </div>
             </a>
         </div>
         {% endfor %}
-        <!-- + button to create a new project -->
-        <div class="col-12 d-flex justify-content-end">
-            <a href="#" class="text-decoration-none">
-                <div class="card add-new-card d-flex flex-column align-items-center justify-content-center"
-                    style="width: 100px; height: 120px; border: 2px dashed #6c757d; min-height: unset; padding: 0.5rem;">
-                    <i class="bi bi-plus-lg display-5 text-secondary mb-1"></i>
-                    <h6 class="fw-normal text-secondary mb-0 text-center">Add Project</h6>
+
+
+
+        <!-- + button — inside the same grid -->
+        <div class="col">
+            <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                <div class="card h-100 bg-light border-3 border-dashed border-primary d-flex flex-column justify-content-center text-center card-lift-effect" style="cursor: pointer;">
+                    <i class="bi bi-plus-lg display-1 text-primary mb-3"></i>
+                    <h3 class="fw-bold text-primary">New Project</h3>
                 </div>
             </a>
         </div>
 
-                
+    </div>
+
+
+
+
+    <!-- Modal form — only name -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form method="POST" action="{{ url_for('add_project') }}">
+            <div class="modal-header">
+              <h5 class="modal-title">Create New Project</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Project Name</label>
+                <input type="text" class="form-control" name="name" required placeholder="Enter project name">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Create Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 </div>
 
 
 
-
-
+<!-- STYLES (SIZE & HOVER) -->
 <style>
     .card-lift-effect {
         transition: all 0.35s ease;
         cursor: pointer;
-        min-height: 210px;
+        min-height: 180px;     /* ← smaller height */
     }
     .card-lift-effect:hover {
-        transform: translateY(-14px);
+        transform: translateY(-14px) scale(0.85);
         box-shadow: 0 28px 56px rgba(0,0,0,0.28) !important;
     }
 
-    /* style for the + "New Project" card */
-.add-new-card {
-    transition: all 0.35s ease;
-    cursor: pointer;
-    min-height: 210px;
-    border-style: dashed !important;
-}
-.add-new-card:hover {
-    transform: translateY(-14px);
-    box-shadow: 0 28px 56px rgba(0,0,0,0.28) !important;
-    background-color: #f8f9fa !important;
-}
-    .bg-indigo { background: linear-gradient(135deg, #4f46e5, #7c3aed) !important; }
-    .bg-teal   { background-color: #20c997 !important; }
-    .bg-purple { background-color: #6f42c1 !important; }
-    .bg-grey-dark   { background-color: #495057 !important; }
-    .bg-grey-medium { background-color: #6c757d !important; }
+    .card {
+        min-height: 180px !important;
+        padding: 1rem !important;
+    }
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    .card h2 {
+        font-size: 1.3rem !important;
+    }
+    .card i {
+        font-size: 3rem !important;
+    }
+    .card {
+        transform: scale(0.85);
+        transform-origin: top left;
+    }
 </style>
 {% endblock %}
