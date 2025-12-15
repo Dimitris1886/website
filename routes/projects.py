@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models import Project
 from services.project_service import create_project, rename_project, delete_project
 
@@ -19,8 +19,9 @@ def project_detail(project_id):
 # Add new project
 @projects_bp.route("/add_project", methods=["POST"])
 def add_project():
-    name = request.form.get("name", "")
-    create_project(name)
+    name = request.form.get("name", "").strip()
+    success, message = create_project(name)
+    flash(message, "success" if success else "danger")
     return redirect(url_for("projects.home"))
 
 # Rename project

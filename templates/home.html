@@ -7,7 +7,23 @@
         Welcome to the Project Portal
     </h1>
 
-    <!-- ← PERFECT 4 PER ROW GRID with tiny gaps -->
+    <!-- Flash Messages Here -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="row justify-content-center mb-4">
+          <div class="col-md-6">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- PERFECT 4 PER ROW GRID with tiny gaps -->
     <div class="row row-cols-4 g-2">
 
         {% for project in projects %}
@@ -53,7 +69,13 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label class="form-label">Project Name</label>
-                <input type="text" class="form-control" name="name" required placeholder="Enter project name">
+                <input type="text" 
+                        class="form-control" 
+                        name="name" 
+                        value="{{ request.form.get('name', '') }}" 
+                        required 
+                        placeholder="Enter project name"
+                        autofocus>
               </div>
             </div>
             <div class="modal-footer">
@@ -98,4 +120,21 @@
         transform-origin: top left;
     }
 </style>
+
+
+
+<script>
+    // Check if there are any danger (error) flash messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const hasError = document.querySelector('.alert-danger');
+        if (hasError) {
+            // Automatically open the modal if there was an error
+            const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
+            modal.show();
+
+            // Optional: focus the input field
+            document.querySelector('#addProjectModal input[name="name"]').focus();
+        }
+    });
+</script>
 {% endblock %}
